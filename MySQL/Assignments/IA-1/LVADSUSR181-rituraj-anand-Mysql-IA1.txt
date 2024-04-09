@@ -1,0 +1,120 @@
+Name: Rituraj Anand
+userID: LVADSUSR181
+
+-- Table : customersinteractions
+
+1)
+SELECT
+    ci.CustomerID,
+    ci.DataUsed AS InternetDataUsed
+FROM
+    customerinteractions ci
+WHERE
+    ci.Month = 'March'
+    AND ci.Year = 2024
+    AND ci.DataUsed > (
+        SELECT
+            AVG(ci.DataUsed)
+        FROM
+            customerinteractions ci
+        WHERE
+            ci.Month = 'March'
+            AND ci.Year = 2024
+    );
+
+2)
+-- Problem 2
+
+select CustomerID, CallDuration from customerinteractions
+where month = 'March' and year =2024 and CallDuration>( select CallDuration from ;
+
+SELECT 
+    ci.CustomerID as cu1,
+    ci.CallDuration AS totalminutes
+FROM 
+    customerinteractions ci
+WHERE 
+    ci.month = 'March'
+    AND ci.year = 2024
+    AND ci.CallDuration > (
+        SELECT
+            AVG(ci_avg.CallDuration)
+        FROM
+            customerinteractions ci_avg
+        WHERE
+            ci_avg.Month = 'February'
+            AND ci_avg.Year = 2024
+            and ci_avg.CustomerID = ci.CustomerID
+    );
+
+3)
+
+-- Problem 3
+SELECT 
+    feb.CustomerID,
+    feb.MessageCount AS FebMessageCount,
+    mar.MessageCount AS MarMessageCount,
+    feb.DataUsed AS FebDataUsageGB,
+    mar.DataUsed AS MarDataUsageGB
+FROM 
+    customerinteractions feb
+JOIN 
+    customerinteractions mar ON feb.CustomerID = mar.CustomerID
+WHERE 
+    feb.Month = 'February' AND feb.Year = 2024
+    AND mar.Month = 'March' AND mar.Year = 2024
+    AND feb.MessageCount > mar.MessageCount
+    AND feb.DataUsed < mar.DataUsed;
+
+
+-- Table quarterlysales
+
+4)select ProductTypeID, avg(TotalSalesAmount/UnitsSold) as salesPerformance
+from quarterlysales
+group by ProductTypeID
+order by salesPerformance desc;
+
+5)-- problem 5
+select ProductTypeID, avg(TotalSalesAmount)
+from quarterlysales
+where Quarter = 'Q1' and Year = 2024
+group by ProductTypeID
+limit 1;
+
+6)-- Problem 6
+select ProductTypeID, avg(TotalSalesAmount/UnitsSold) as avgpriceperunit
+from quarterlysales
+where Quarter = 'Q2' and Year = 2024 and ProductTypeID= 1;
+
+7) 
+
+select s1.Region, Avg(ConsumptionKWh) from sectorenergyconsumption s1
+where EnergySource= 'Solar' or 'Wind' and Month='March' and ConsumptionKWh> ( select avg(ConsumptionKWh) from sectorenergyconsumption s1 
+where
+EnergySource= 'Solar' or 'Wind' and Month='March' ) 
+group by region;
+
+
+8) select s1.Sector, s1.ConsumptionKWh
+from sectorenergyconsumption s1
+join sectorenergyconsumption s2
+on s1.RecordID= s2.RecordID
+where s1.Month='March' and s2.Month='February'
+and s1.ConsumptionKWh> s2.ConsumptionKWh;
+
+
+9) select EnergySource, Avg(ConsumptionKWh)
+from sectorenergyconsumption
+where Month='February' 
+group by EnergySource;
+
+10)select CustomerName, FeedbackScore, ClaimsCount
+from insuranceactivities
+where Investigation='No' and FeedbackScore>( select avg(FeedbackScore) from insuranceactivities) and ClaimsCount>( select avg(ClaimsCount) from insuranceactivities);
+
+11)select PolicyID , Sum(AnnualPremium) from insuranceactivities
+where Investigation='No' and FeedbackScore>( select avg(FeedbackScore) from insuranceactivities);
+
+12)
+
+
